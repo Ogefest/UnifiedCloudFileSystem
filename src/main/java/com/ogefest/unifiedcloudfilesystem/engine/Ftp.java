@@ -32,7 +32,7 @@ public class Ftp extends Engine {
             client = new FTPClient();
             hostname = getConfiguration().getStringValue("host");
             port = getConfiguration().getIntValue("port");
-            login = getConfiguration().getStringValue("login");
+            login = getConfiguration().getStringValue("username");
             password = getConfiguration().getStringValue("password");
             rootPath = getConfiguration().getStringValue("path");
 

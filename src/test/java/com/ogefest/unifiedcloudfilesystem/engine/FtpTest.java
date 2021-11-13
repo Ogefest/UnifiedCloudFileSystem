@@ -26,7 +26,7 @@ class FtpTest extends EngineTest {
         HashMap<String, String> hs = new HashMap<>();
         hs.put("host", props.getProperty("ftp.host"));
         hs.put("port", props.getProperty("ftp.port"));
-        hs.put("login", props.getProperty("ftp.login"));
+        hs.put("username", props.getProperty("ftp.username"));
         hs.put("password", props.getProperty("ftp.password"));
         hs.put("path", props.getProperty("ftp.path"));
 
