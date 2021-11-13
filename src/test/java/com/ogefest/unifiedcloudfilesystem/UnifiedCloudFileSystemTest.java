@@ -84,7 +84,7 @@ class UnifiedCloudFileSystemTest {
 
     @Test
     @Order(2)
-    void unregisterEngine() {
+    void unregisterEngine() throws IOException {
         ucfs = new UnifiedCloudFileSystem();
         ucfs.registerEngine("e1", engine1);
         assertNotNull(ucfs.getEngine("e1"));
@@ -103,7 +103,7 @@ class UnifiedCloudFileSystemTest {
 
     @Test
     @Order(5)
-    void list() {
+    void list() throws IOException {
         FileObject fo = ucfs.getByPath("e1", "/");
         ArrayList<FileObject> objectList = ucfs.list(fo);
         assertTrue(objectList.get(0).getEngineItem().getName().equals("asd.txt"));
@@ -143,7 +143,7 @@ class UnifiedCloudFileSystemTest {
 
     @Test
     @Order(6)
-    void copy() {
+    void copy() throws IOException {
         FileObject fin = ucfs.getByPath("e1", "/asd.txt");
         FileObject fout = ucfs.getByPath("e2", "/cde.txt");
 
@@ -154,7 +154,7 @@ class UnifiedCloudFileSystemTest {
 
     @Test
     @Order(9)
-    void delete() {
+    void delete() throws IOException {
         FileObject fo = ucfs.getByPath("e2", "/cde2.txt");
         assertTrue(ucfs.exists(fo));
         ucfs.delete(fo);
@@ -163,7 +163,7 @@ class UnifiedCloudFileSystemTest {
 
     @Test
     @Order(8)
-    void move() {
+    void move() throws IOException {
         FileObject fin = ucfs.getByPath("e1", "/asd.txt");
         FileObject fout = ucfs.getByPath("e2", "/cde2.txt");
 
