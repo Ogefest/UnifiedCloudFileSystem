@@ -4,31 +4,37 @@ import com.ogefest.unifiedcloudfilesystem.Engine;
 import com.ogefest.unifiedcloudfilesystem.EngineConfiguration;
 import com.ogefest.unifiedcloudfilesystem.EngineItem;
 import com.ogefest.unifiedcloudfilesystem.MissingConfigurationKeyException;
+import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.net.SocketException;
 import java.util.ArrayList;
 
 public class Ftp extends Engine {
 
-    FTPClient client;
-    String hostname;
-    int port;
-    String login;
-    String password;
+    private FTPClient client;
+    private String hostname;
+    private int port;
+    private String login;
+    private String password;
+    private String rootPath;
 
     public Ftp(EngineConfiguration conf) throws IOException {
         super(conf);
 
         try {
+            client = new FTPClient();
             hostname = getConfiguration().getStringValue("host");
             port = getConfiguration().getIntValue("port");
             login = getConfiguration().getStringValue("login");
             password = getConfiguration().getStringValue("password");
+            rootPath = getConfiguration().getStringValue("path");
 
             client.connect(hostname, port);
         } catch (MissingConfigurationKeyException e) {
@@ -45,7 +51,14 @@ public class Ftp extends Engine {
             throw new IOException("Exception in connecting to FTP Server");
         }
 
+//        client.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out)));
+        client.setBufferSize(1024 * 1024);
+
+        client.enterLocalPassiveMode();
+        client.setAutodetectUTF8(true);
+
         client.login(login, password);
+        client.changeWorkingDirectory(rootPath);
     }
 
     @Override
@@ -55,23 +68,27 @@ public class Ftp extends Engine {
 
     @Override
     public EngineItem set(EngineItem engineItem, InputStream input) throws IOException {
-        client.storeFile(engineItem.getPath(), input);
+        client.storeFile(getFullPath(engineItem), input);
 
         return new EngineItem(engineItem.getPath());
     }
 
     @Override
     public InputStream get(EngineItem engineItem) throws IOException {
-        return client.retrieveFileStream(engineItem.getPath());
+        return client.retrieveFileStream(getFullPath(engineItem));
     }
 
     @Override
     public ArrayList<EngineItem> list(EngineItem engineItem) throws IOException {
-        FTPFile[] files = client.listFiles(engineItem.getPath());
+        String pathToList = getFullPath(engineItem);
+        FTPFile[] files = client.listFiles(pathToList);
 
         ArrayList<EngineItem> items = new ArrayList<>();
         for (FTPFile f : files) {
-            items.add(new EngineItem(f.getLink()));
+            if (f.getName().equals(".") || f.getName().equals("..")) {
+                continue;
+            }
+            items.add(new EngineItem(pathToList + "/" + f.getName()));
         }
 
         return items;
@@ -79,19 +96,28 @@ public class Ftp extends Engine {
 
     @Override
     public boolean exists(EngineItem engineItem) throws IOException {
-        FTPFile[] files = client.listFiles(engineItem.getPath());
+        FTPFile[] files = client.listFiles(getFullPath(engineItem));
         return files.length == 1;
     }
 
     @Override
     public void delete(EngineItem engineItem) throws IOException {
-        client.deleteFile(engineItem.getPath());
+        client.deleteFile(getFullPath(engineItem));
     }
 
     @Override
     public void move(EngineItem from, EngineItem to) throws IOException {
-        client.rename(from.getPath(), to.getPath());
+        client.rename(getFullPath(from), getFullPath(to));
     }
 
+    private String getFullPath(EngineItem item) {
 
+        String rawPath = item.getPath();
+        if (item.getPath().substring(0, 1).equals("/")) {
+            rawPath = item.getPath().substring(1);
+        }
+        String toReturn = rawPath;
+
+        return toReturn;
+    }
 }

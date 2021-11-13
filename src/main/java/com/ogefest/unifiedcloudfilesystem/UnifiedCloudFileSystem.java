@@ -15,7 +15,7 @@ public class UnifiedCloudFileSystem {
         engineRegistry.put(name, engine);
     }
 
-    public void unregisterEngine(String name) {
+    public void unregisterEngine(String name) throws IOException {
         engineRegistry.get(name).finish();
         engineRegistry.remove(name);
     }
@@ -24,7 +24,7 @@ public class UnifiedCloudFileSystem {
         return engineRegistry.get(name);
     }
 
-    public ArrayList<FileObject> list(FileObject engineItem) {
+    public ArrayList<FileObject> list(FileObject engineItem) throws IOException {
 
         ArrayList<EngineItem> eiList = engineRegistry.get(engineItem.getEngineName()).list(engineItem.getEngineItem());
         ArrayList<FileObject> fileObjects = new ArrayList<>();
@@ -35,7 +35,7 @@ public class UnifiedCloudFileSystem {
         return fileObjects;
     }
 
-    public void write(FileObject engineItem, File file) {
+    public void write(FileObject engineItem, File file) throws IOException {
         try {
             InputStream input = new FileInputStream(file);
             write(engineItem, input);
@@ -44,21 +44,21 @@ public class UnifiedCloudFileSystem {
         }
     }
 
-    public void write(FileObject engineItem, byte[] data) {
+    public void write(FileObject engineItem, byte[] data) throws IOException {
         InputStream input = new ByteArrayInputStream(data);
         write(engineItem, input);
     }
 
-    public void write(FileObject engineItem, InputStream input) {
+    public void write(FileObject engineItem, InputStream input) throws IOException {
         Engine ei = engineRegistry.get(engineItem.getEngineName());
         ei.set(engineItem.getEngineItem(), input);
     }
 
-    public InputStream read(FileObject item) {
+    public InputStream read(FileObject item) throws IOException {
         return engineRegistry.get(item.getEngineName()).get(item.getEngineItem());
     }
 
-    public void copy(FileObject from, FileObject to) {
+    public void copy(FileObject from, FileObject to) throws IOException {
         Engine engineFrom = engineRegistry.get(from.getEngineName());
         Engine engineTo = engineRegistry.get(to.getEngineName());
 
@@ -70,15 +70,15 @@ public class UnifiedCloudFileSystem {
         }
     }
 
-    public void delete(FileObject engineItem) {
+    public void delete(FileObject engineItem) throws IOException {
         engineRegistry.get(engineItem.getEngineName()).delete(engineItem.getEngineItem());
     }
 
-    public boolean exists(FileObject item) {
+    public boolean exists(FileObject item) throws IOException {
         return engineRegistry.get(item.getEngineName()).exists(item.getEngineItem());
     }
 
-    public void move(FileObject from, FileObject to) {
+    public void move(FileObject from, FileObject to) throws IOException {
         Engine engineFrom = engineRegistry.get(from.getEngineName());
         Engine engineTo = engineRegistry.get(to.getEngineName());
 
