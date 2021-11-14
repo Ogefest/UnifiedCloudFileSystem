@@ -24,7 +24,7 @@ public class UnifiedCloudFileSystem {
         return engineRegistry.get(name);
     }
 
-    public ArrayList<FileObject> list(FileObject engineItem) throws IOException {
+    public ArrayList<FileObject> list(FileObject engineItem) throws IOException, ResourceAccessException {
 
         ArrayList<EngineItem> eiList = engineRegistry.get(engineItem.getEngineName()).list(engineItem.getEngineItem());
         ArrayList<FileObject> fileObjects = new ArrayList<>();
@@ -70,7 +70,7 @@ public class UnifiedCloudFileSystem {
         }
     }
 
-    public void delete(FileObject engineItem) throws IOException {
+    public void delete(FileObject engineItem) throws IOException, ResourceAccessException {
         engineRegistry.get(engineItem.getEngineName()).delete(engineItem.getEngineItem());
     }
 
@@ -78,7 +78,7 @@ public class UnifiedCloudFileSystem {
         return engineRegistry.get(item.getEngineName()).exists(item.getEngineItem());
     }
 
-    public void move(FileObject from, FileObject to) throws IOException {
+    public void move(FileObject from, FileObject to) throws IOException, ResourceAccessException {
         Engine engineFrom = engineRegistry.get(from.getEngineName());
         Engine engineTo = engineRegistry.get(to.getEngineName());
 

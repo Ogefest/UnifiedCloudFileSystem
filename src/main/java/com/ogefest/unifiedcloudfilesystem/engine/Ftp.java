@@ -1,9 +1,6 @@
 package com.ogefest.unifiedcloudfilesystem.engine;
 
-import com.ogefest.unifiedcloudfilesystem.Engine;
-import com.ogefest.unifiedcloudfilesystem.EngineConfiguration;
-import com.ogefest.unifiedcloudfilesystem.EngineItem;
-import com.ogefest.unifiedcloudfilesystem.MissingConfigurationKeyException;
+import com.ogefest.unifiedcloudfilesystem.*;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
@@ -65,7 +62,14 @@ public class Ftp extends Engine {
 
     @Override
     public EngineItem set(EngineItem engineItem, InputStream input) throws IOException {
-        client.storeFile(getFullPath(engineItem), input);
+
+        String fullpath = getFullPath(engineItem);
+        EngineItem parent = engineItem.getParent();
+        if (!exists(parent)) {
+            mkdir(parent);
+        }
+
+        client.storeFile(fullpath, input);
 
         return new EngineItem(engineItem.getPath());
     }
@@ -81,11 +85,13 @@ public class Ftp extends Engine {
         FTPFile[] files = client.listFiles(pathToList);
 
         ArrayList<EngineItem> items = new ArrayList<>();
-        for (FTPFile f : files) {
-            if (f.getName().equals(".") || f.getName().equals("..")) {
-                continue;
+        if (files.length > 1) {
+            for (FTPFile f : files) {
+                if (f.getName().equals(".") || f.getName().equals("..")) {
+                    continue;
+                }
+                items.add(new EngineItem(pathToList + "/" + f.getName()));
             }
-            items.add(new EngineItem(pathToList + "/" + f.getName()));
         }
 
         return items;
@@ -94,17 +100,41 @@ public class Ftp extends Engine {
     @Override
     public boolean exists(EngineItem engineItem) throws IOException {
         FTPFile[] files = client.listFiles(getFullPath(engineItem));
-        return files.length == 1;
+        return files.length > 0;
     }
 
     @Override
-    public void delete(EngineItem engineItem) throws IOException {
-        client.deleteFile(getFullPath(engineItem));
+    public void delete(EngineItem engineItem) throws IOException, ResourceAccessException {
+
+        ArrayList<EngineItem> contentInside = list(engineItem);
+
+        if (contentInside.size() > 0) {
+            for (EngineItem ei : contentInside) {
+                delete(ei);
+            }
+        }
+
+        FTPFile[] files = client.listFiles(getFullPath(engineItem));
+        if (files.length == 1) {
+            client.deleteFile(getFullPath(engineItem));
+        } else {
+            client.removeDirectory(getFullPath(engineItem));
+        }
+
     }
 
     @Override
     public void move(EngineItem from, EngineItem to) throws IOException {
         client.rename(getFullPath(from), getFullPath(to));
+    }
+
+    @Override
+    public void mkdir(EngineItem item) throws IOException {
+        EngineItem parent = item.getParent();
+        if (!parent.getPath().equals("/") && !exists(parent)) {
+            mkdir(parent);
+        }
+        client.makeDirectory(getFullPath(item));
     }
 
     private String getFullPath(EngineItem item) {

@@ -55,7 +55,7 @@ abstract public class EngineTest {
 
     @Test
     @Order(4)
-    void list() throws IOException {
+    void list() throws IOException, ResourceAccessException {
         ArrayList<EngineItem> lst = fs.list(new EngineRootItem());
         assertTrue(lst.get(0).getName().equals("abc.txt"));
     }
@@ -64,11 +64,12 @@ abstract public class EngineTest {
     @Order(3)
     void exists() throws IOException {
         assertTrue(fs.exists(new EngineItem("abc.txt")));
+        assertFalse(fs.exists(new EngineItem("/d1/d2/abc.txt")));
     }
 
     @Test
     @Order(6)
-    void delete() throws IOException {
+    void delete() throws IOException, ResourceAccessException {
         EngineItem toDelete = new EngineItem("cde.txt");
         assertTrue(fs.exists(toDelete));
         fs.delete(toDelete);
@@ -86,5 +87,47 @@ abstract public class EngineTest {
         fs.move(from, to);
         assertTrue(fs.exists(to));
         assertFalse(fs.exists(from));
+    }
+
+    @Test
+    @Order(7)
+    void mkdir() throws IOException {
+        EngineItem ei = new EngineItem("/dir1/dir2/dir3");
+        EngineItem ei2 = new EngineItem("/dir1/dir3/dir5");
+
+        assertFalse(fs.exists(ei));
+        fs.mkdir(ei);
+        assertTrue(fs.exists(ei));
+
+        assertFalse(fs.exists(ei2));
+        fs.mkdir(ei2);
+        assertTrue(fs.exists(ei2));
+    }
+
+    @Test
+    @Order(8)
+    void saveFileInSubdirectory() throws IOException {
+        EngineItem ei = new EngineItem("/filedir1/filedir2/filedir3/abc.txt");
+        assertFalse(fs.exists(ei));
+
+        byte[] initialArray = {'1', '2', '3'};
+        InputStream input = new ByteArrayInputStream(initialArray);
+        fs.set(ei, input);
+        input.close();
+        assertTrue(fs.exists(ei));
+    }
+
+    @Test
+    @Order(9)
+    void deleteDirectoryWithContent() throws IOException, ResourceAccessException {
+        EngineItem ei = new EngineItem("/filedir1");
+        assertTrue(fs.exists(ei));
+        fs.delete(ei);
+        assertFalse(fs.exists(ei));
+
+        EngineItem ei2 = new EngineItem("/dir1");
+        assertTrue(fs.exists(ei2));
+        fs.delete(ei2);
+        assertFalse(fs.exists(ei2));
     }
 }

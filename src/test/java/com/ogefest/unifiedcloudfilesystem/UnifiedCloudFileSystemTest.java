@@ -103,7 +103,7 @@ class UnifiedCloudFileSystemTest {
 
     @Test
     @Order(5)
-    void list() throws IOException {
+    void list() throws IOException, ResourceAccessException {
         FileObject fo = ucfs.getByPath("e1", "/");
         ArrayList<FileObject> objectList = ucfs.list(fo);
         assertTrue(objectList.get(0).getEngineItem().getName().equals("asd.txt"));
@@ -154,7 +154,7 @@ class UnifiedCloudFileSystemTest {
 
     @Test
     @Order(9)
-    void delete() throws IOException {
+    void delete() throws IOException, ResourceAccessException {
         FileObject fo = ucfs.getByPath("e2", "/cde2.txt");
         assertTrue(ucfs.exists(fo));
         ucfs.delete(fo);
@@ -163,7 +163,7 @@ class UnifiedCloudFileSystemTest {
 
     @Test
     @Order(8)
-    void move() throws IOException {
+    void move() throws IOException, ResourceAccessException {
         FileObject fin = ucfs.getByPath("e1", "/asd.txt");
         FileObject fout = ucfs.getByPath("e2", "/cde2.txt");
 

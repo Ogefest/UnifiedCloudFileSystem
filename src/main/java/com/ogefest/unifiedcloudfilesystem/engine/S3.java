@@ -4,6 +4,7 @@ import com.ogefest.unifiedcloudfilesystem.Engine;
 import com.ogefest.unifiedcloudfilesystem.EngineConfiguration;
 import com.ogefest.unifiedcloudfilesystem.EngineItem;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -40,6 +41,11 @@ public class S3 extends Engine {
 
     @Override
     public void move(EngineItem from, EngineItem to) {
+
+    }
+
+    @Override
+    public void mkdir(EngineItem item) throws IOException {
 
     }
 
