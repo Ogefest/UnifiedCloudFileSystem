@@ -2,8 +2,8 @@ package com.ogefest.unifiedcloudfilesystem;
 
 public class FileObject {
 
-    private EngineItem engineItem;
-    private String engineName;
+    private final EngineItem engineItem;
+    private final String engineName;
 
     public FileObject(String engineName, EngineItem engineItem) {
         this.engineItem = engineItem;

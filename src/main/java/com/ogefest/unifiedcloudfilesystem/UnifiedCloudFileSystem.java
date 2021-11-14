@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class UnifiedCloudFileSystem {
 
-    private HashMap<String, Engine> engineRegistry = new HashMap<>();
+    private final HashMap<String, Engine> engineRegistry = new HashMap<>();
 
     public void registerEngine(String name, Engine engine) {
         if (engineRegistry.containsKey(name)) {

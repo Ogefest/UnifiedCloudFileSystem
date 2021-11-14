@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class EngineConfiguration {
 
-    private HashMap<String, String> configuration;
+    private final HashMap<String, String> configuration;
 
 //    public Configuration(String input) {
 //

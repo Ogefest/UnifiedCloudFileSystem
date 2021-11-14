@@ -16,7 +16,7 @@ import java.util.List;
 
 public class WebDav extends Engine {
 
-    private Sardine webdavClient;
+    private final Sardine webdavClient;
 
     private String url;
     private String username;
@@ -61,7 +61,7 @@ public class WebDav extends Engine {
 
         for (DavResource res : davList) {
 
-            String path = baseUrl.getPath().substring(0, baseUrl.getPath().length()-1);
+            String path = baseUrl.getPath().substring(0, baseUrl.getPath().length() - 1);
             String filePath = res.getPath().replace(path, "");
             if (filePath.equals("/")) {
                 continue;
