@@ -4,15 +4,8 @@ import com.ogefest.unifiedcloudfilesystem.EngineConfiguration;
 import com.ogefest.unifiedcloudfilesystem.EngineTest;
 import org.junit.jupiter.api.*;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Comparator;
 import java.util.HashMap;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
