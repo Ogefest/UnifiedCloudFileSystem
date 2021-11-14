@@ -122,7 +122,7 @@ class UnifiedCloudFileSystemTest {
         FileObject fo = ucfs.getByPath("e1", "/asd.txt");
 
         assertFalse(ucfs.exists(fo));
-        byte[] initialArray = { '1', '2', '3' };
+        byte[] initialArray = {'1', '2', '3'};
         InputStream input = new ByteArrayInputStream(initialArray);
         ucfs.write(fo, input);
         input.close();
@@ -179,7 +179,7 @@ class UnifiedCloudFileSystemTest {
         InputStream is = ucfs.read(fin);
         byte[] data = is.readAllBytes();
 
-        byte[] initialArray = { '1', '2', '3' };
+        byte[] initialArray = {'1', '2', '3'};
         assertArrayEquals(data, initialArray);
     }
 
