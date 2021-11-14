@@ -34,7 +34,7 @@ abstract public class EngineTest {
     void set() throws IOException {
 
         EngineItem ei = new EngineItem("abc.txt");
-        byte[] initialArray = { '1', '2', '3' };
+        byte[] initialArray = {'1', '2', '3'};
         InputStream input = new ByteArrayInputStream(initialArray);
         fs.set(ei, input);
         input.close();
@@ -48,7 +48,7 @@ abstract public class EngineTest {
         InputStream is = fs.get(ei);
         byte[] fdata = is.readAllBytes();
 
-        byte[] initialArray = { '1', '2', '3' };
+        byte[] initialArray = {'1', '2', '3'};
 
         assertArrayEquals(fdata, initialArray);
     }

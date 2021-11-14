@@ -14,7 +14,7 @@ public class EngineConfigurationTest {
 
     @BeforeEach
     void setUp() {
-        HashMap<String,String> input = new HashMap<>();
+        HashMap<String, String> input = new HashMap<>();
         input.put("str1", "str");
         input.put("int1", "123");
         input.put("boolean", "false");
