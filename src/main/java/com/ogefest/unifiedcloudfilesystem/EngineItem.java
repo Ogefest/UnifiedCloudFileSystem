@@ -9,7 +9,7 @@ public class EngineItem {
     protected String path;
 
     public EngineItem(String path) {
-        this.path = path;
+        this.path = pathCleanup(path);
         updateName();
     }
 
@@ -25,13 +25,28 @@ public class EngineItem {
         return path;
     }
 
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-
     public void setPath(String path) {
-        this.path = path;
+        this.path = pathCleanup(path);
         updateName();
+    }
+
+    public EngineItem getParent() {
+        String[] elems = path.split("/");
+        String parentPath = "";
+        int counter = 0;
+        for (String e : elems) {
+            if (e.equals("")) {
+                continue;
+            }
+            if (counter == elems.length - 2) {
+                break;
+            }
+
+            parentPath = parentPath + "/" + e;
+            counter++;
+        }
+
+        return new EngineItem(parentPath);
     }
 
     private void updateName() {
@@ -39,5 +54,28 @@ public class EngineItem {
         File f = new File(path);
         name = f.getName();
 
+    }
+
+    private String pathCleanup(String path) {
+        if (path == null) {
+            path = "/";
+        }
+
+        path = path.trim();
+        if (path.equals("")) {
+            path = "/";
+        }
+        if (!path.substring(0, 1).equals("/")) {
+            path = "/" + path;
+        }
+        path = path.trim().replaceAll("/+", "/");
+        if (path.length() > 1) {
+            char lastChar = path.charAt(path.length() - 1);
+            if (lastChar == '/') {
+                path = path.substring(0, path.length() - 1);
+            }
+        }
+
+        return path;
     }
 }

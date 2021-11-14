@@ -1,9 +1,6 @@
 package com.ogefest.unifiedcloudfilesystem.engine;
 
-import com.ogefest.unifiedcloudfilesystem.Engine;
-import com.ogefest.unifiedcloudfilesystem.EngineConfiguration;
-import com.ogefest.unifiedcloudfilesystem.EngineItem;
-import com.ogefest.unifiedcloudfilesystem.MissingConfigurationKeyException;
+import com.ogefest.unifiedcloudfilesystem.*;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -20,6 +17,14 @@ public class FileSystem extends Engine {
         FileOutputStream fout = null;
         try {
             String outputPath = getFullPath(engineItem);
+            File parent = new File(engineItem.getPath()).getParentFile();
+            if (parent != null && !parent.exists()) {
+                mkdir(new EngineItem(parent.getPath()));
+            }
+
+            File f = new File(outputPath);
+
+
             fout = new FileOutputStream(outputPath);
 
             byte[] buffer = new byte[10 * 1024 * 1024];
@@ -54,24 +59,15 @@ public class FileSystem extends Engine {
 
         File[] files = d.listFiles();
         ArrayList<EngineItem> result = new ArrayList<>();
-        for (File f : files) {
-            EngineItem tmp = new EngineItem(f.getPath());
-            result.add(tmp);
+        if (files != null) {
+            for (File f : files) {
+                EngineItem tmp = new EngineItem(engineItem.getPath() + "/" + f.getName());
+                result.add(tmp);
+            }
         }
 
         return result;
     }
-
-//    @Override
-//    public ArrayList<EngineItem> root() {
-//        try {
-//            EngineItem rootItem = new EngineItem(getConfiguration().getStringValue("path"), "root", 0);
-//            return list(rootItem);
-//        } catch (MissingConfigurationKey e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
 
     @Override
     public boolean exists(EngineItem engineItem) {
@@ -81,8 +77,15 @@ public class FileSystem extends Engine {
     }
 
     @Override
-    public void delete(EngineItem engineItem) {
+    public void delete(EngineItem engineItem) throws IOException, ResourceAccessException {
         File f = new File(getFullPath(engineItem));
+        ArrayList<EngineItem> contentInside = list(engineItem);
+        if (contentInside.size() > 0) {
+            for (EngineItem ei : contentInside) {
+                delete(ei);
+            }
+        }
+
         f.delete();
     }
 
@@ -90,6 +93,16 @@ public class FileSystem extends Engine {
     public void move(EngineItem from, EngineItem to) {
         File f = new File(getFullPath(from));
         f.renameTo(new File(getFullPath(to)));
+    }
+
+    @Override
+    public void mkdir(EngineItem item) throws IOException {
+        File f = new File(getFullPath(item));
+        EngineItem parent = item.getParent();
+        if (!exists(parent)) {
+            mkdir(parent);
+        }
+        f.mkdir();
     }
 
     private String getFullPath(EngineItem item) {
