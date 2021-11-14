@@ -96,10 +96,4 @@ public class UnifiedCloudFileSystem {
         return new FileObject(engineName, new EngineItem(path));
     }
 
-    public void run(Action action) {
-        action.setEngines(engineRegistry);
-
-        action.run();
-    }
-
 }
