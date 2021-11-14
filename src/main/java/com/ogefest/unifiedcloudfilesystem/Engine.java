@@ -27,10 +27,15 @@ abstract public class Engine {
     }
 
     abstract public EngineItem set(EngineItem engineItem, InputStream input) throws IOException;
+
     abstract public InputStream get(EngineItem engineItem) throws IOException;
+
     abstract public ArrayList<EngineItem> list(EngineItem engineItem) throws IOException;
+
     abstract public boolean exists(EngineItem engineItem) throws IOException;
+
     abstract public void delete(EngineItem engineItem) throws IOException;
+
     abstract public void move(EngineItem from, EngineItem to) throws IOException;
 
 

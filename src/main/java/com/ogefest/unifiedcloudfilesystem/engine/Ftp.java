@@ -110,7 +110,7 @@ public class Ftp extends Engine {
     private String getFullPath(EngineItem item) {
 
         String rawPath = item.getPath();
-        if (item.getPath().substring(0, 1).equals("/")) {
+        if (item.getPath().charAt(0) == '/') {
             rawPath = item.getPath().substring(1);
         }
         String toReturn = rawPath;

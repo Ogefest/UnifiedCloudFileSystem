@@ -36,7 +36,7 @@ public class EngineItem {
 
     private void updateName() {
 
-        File f =  new File(path);
+        File f = new File(path);
         name = f.getName();
 
     }
