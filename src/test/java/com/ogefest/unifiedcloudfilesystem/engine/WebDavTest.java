@@ -10,8 +10,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import java.io.IOException;
 import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class WebDavTest extends EngineTest {

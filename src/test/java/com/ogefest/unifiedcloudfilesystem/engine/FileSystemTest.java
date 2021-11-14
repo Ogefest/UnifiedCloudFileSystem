@@ -12,8 +12,6 @@ import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class FileSystemTest extends EngineTest {
