@@ -1,18 +1,12 @@
 package com.ogefest.unifiedcloudfilesystem.engine;
 
-import com.github.sardine.ant.command.Copy;
-import com.github.sardine.model.Remove;
 import com.ogefest.unifiedcloudfilesystem.Engine;
 import com.ogefest.unifiedcloudfilesystem.EngineConfiguration;
 import com.ogefest.unifiedcloudfilesystem.EngineItem;
 import com.ogefest.unifiedcloudfilesystem.MissingConfigurationKeyException;
-
 import io.minio.*;
 import io.minio.errors.*;
-import io.minio.messages.DeleteError;
-import io.minio.messages.DeleteObject;
 import io.minio.messages.Item;
-
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -20,8 +14,6 @@ import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 public class S3 extends Engine {
 
@@ -53,7 +45,7 @@ public class S3 extends Engine {
             minioClient.putObject(PutObjectArgs.builder()
                     .bucket(bucketName)
                     .object(engineItem.getPath())
-                            .stream(input, input.available(), -1)
+                    .stream(input, input.available(), -1)
                     .build());
 
             return engineItem;
@@ -160,19 +152,19 @@ public class S3 extends Engine {
 
 //        try {
 
-            Iterable<Result<Item>> bucketList = minioClient.listObjects(
-                    ListObjectsArgs
-                            .builder()
-                            .bucket(bucketName)
-                            .prefix(engineItem.getPath())
-                            .recursive(false)
-                            .maxKeys(1)
-                            .build()
-            );
+        Iterable<Result<Item>> bucketList = minioClient.listObjects(
+                ListObjectsArgs
+                        .builder()
+                        .bucket(bucketName)
+                        .prefix(engineItem.getPath())
+                        .recursive(false)
+                        .maxKeys(1)
+                        .build()
+        );
 
-            for (Result<Item> it : bucketList) {
-                return true;
-            }
+        for (Result<Item> it : bucketList) {
+            return true;
+        }
 
 
         return false;
