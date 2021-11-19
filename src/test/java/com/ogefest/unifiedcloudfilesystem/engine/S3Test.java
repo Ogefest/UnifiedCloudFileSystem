@@ -5,11 +5,7 @@ import com.ogefest.unifiedcloudfilesystem.EngineTest;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.HashMap;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class S3Test extends EngineTest {
     @BeforeAll
