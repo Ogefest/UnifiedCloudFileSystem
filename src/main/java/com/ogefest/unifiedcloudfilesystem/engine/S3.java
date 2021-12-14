@@ -1,9 +1,6 @@
 package com.ogefest.unifiedcloudfilesystem.engine;
 
-import com.ogefest.unifiedcloudfilesystem.Engine;
-import com.ogefest.unifiedcloudfilesystem.EngineConfiguration;
-import com.ogefest.unifiedcloudfilesystem.EngineItem;
-import com.ogefest.unifiedcloudfilesystem.MissingConfigurationKeyException;
+import com.ogefest.unifiedcloudfilesystem.*;
 import io.minio.*;
 import io.minio.errors.*;
 import io.minio.messages.Item;
@@ -119,7 +116,12 @@ public class S3 extends Engine {
             try {
                 item = resultItem.get();
 
-                EngineItem ei = new EngineItem(item.objectName());
+                EngineItemAttribute attribute = new EngineItemAttribute();
+                attribute.isFile = !item.isDir();
+                attribute.isDirectory = item.isDir();
+                attribute.size = item.size();
+
+                EngineItem ei = new EngineItem(item.objectName(), attribute);
                 result.add(ei);
             } catch (ErrorResponseException e) {
                 e.printStackTrace();

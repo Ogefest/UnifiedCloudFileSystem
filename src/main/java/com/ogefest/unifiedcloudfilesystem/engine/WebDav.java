@@ -82,7 +82,13 @@ public class WebDav extends Engine {
             EngineItem itemToAdd = new EngineItem(filePath);
 
             if (!itemToAdd.getPath().equals(engineItem.getPath())) {
-                result.add(new EngineItem(filePath));
+
+                EngineItemAttribute attribute = new EngineItemAttribute();
+                attribute.isFile = !res.isDirectory();
+                attribute.isDirectory = res.isDirectory();
+                attribute.size = res.getContentLength().longValue();
+
+                result.add(new EngineItem(filePath, attribute));
             }
         }
 

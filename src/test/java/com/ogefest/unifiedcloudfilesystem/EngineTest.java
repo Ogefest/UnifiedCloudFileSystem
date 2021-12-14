@@ -58,6 +58,12 @@ abstract public class EngineTest {
     void list() throws IOException, ResourceAccessException {
         ArrayList<EngineItem> lst = fs.list(new EngineRootItem());
         assertTrue(lst.get(0).getName().equals("abc.txt"));
+
+        EngineItem ei = lst.get(0);
+
+        assertTrue(ei.isFile());
+        assertFalse(ei.isDirectory());
+        assertEquals(ei.getSize(), 3);
     }
 
     @Test

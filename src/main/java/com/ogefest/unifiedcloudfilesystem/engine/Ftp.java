@@ -90,7 +90,13 @@ public class Ftp extends Engine {
                 if (f.getName().equals(".") || f.getName().equals("..")) {
                     continue;
                 }
-                items.add(new EngineItem(pathToList + "/" + f.getName()));
+
+                EngineItemAttribute attribute = new EngineItemAttribute();
+                attribute.isFile = f.isFile();
+                attribute.isDirectory = f.isDirectory();
+                attribute.size = f.getSize();
+
+                items.add(new EngineItem(pathToList + "/" + f.getName(), attribute));
             }
         }
 

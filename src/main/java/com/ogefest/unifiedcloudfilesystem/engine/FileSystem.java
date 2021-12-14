@@ -61,7 +61,13 @@ public class FileSystem extends Engine {
         ArrayList<EngineItem> result = new ArrayList<>();
         if (files != null) {
             for (File f : files) {
-                EngineItem tmp = new EngineItem(engineItem.getPath() + "/" + f.getName());
+
+                EngineItemAttribute attribute = new EngineItemAttribute();
+                attribute.isFile = f.isFile();
+                attribute.isDirectory = f.isDirectory();
+                attribute.size = f.length();
+
+                EngineItem tmp = new EngineItem(engineItem.getPath() + "/" + f.getName(), attribute);
                 result.add(tmp);
             }
         }

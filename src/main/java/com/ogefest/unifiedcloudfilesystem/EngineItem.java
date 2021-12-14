@@ -1,16 +1,23 @@
 package com.ogefest.unifiedcloudfilesystem;
 
 import java.io.File;
+import java.time.LocalDateTime;
 
 public class EngineItem {
 
     protected String name;
-    protected long size;
     protected String path;
+    protected EngineItemAttribute attributes;
 
     public EngineItem(String path) {
         this.path = pathCleanup(path);
         updateName();
+    }
+
+    public EngineItem(String path, EngineItemAttribute attributes) {
+        this.path = pathCleanup(path);
+        updateName();
+        this.attributes = attributes;
     }
 
     public String getName() {
@@ -18,7 +25,23 @@ public class EngineItem {
     }
 
     public long getSize() {
-        return size;
+        return attributes.size;
+    }
+
+    public boolean isDirectory() {
+        return attributes.isDirectory;
+    }
+
+    public boolean isFile() {
+        return attributes.isFile;
+    }
+
+    public LocalDateTime getLastModified() {
+        return attributes.lastModified;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return attributes.creationTime;
     }
 
     public String getPath() {
