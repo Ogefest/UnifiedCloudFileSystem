@@ -19,7 +19,9 @@ public class FileSystem extends Engine {
             String outputPath = getFullPath(engineItem);
             File parent = new File(engineItem.getPath()).getParentFile();
             if (parent != null && !parent.exists()) {
-                mkdir(new EngineItem(parent.getPath()));
+                EngineItemAttribute eia = new EngineItemAttribute();
+                eia.isDirectory = true;
+                mkdir(new EngineItem(parent.getPath(), eia));
             }
 
             File f = new File(outputPath);
@@ -40,7 +42,7 @@ public class FileSystem extends Engine {
             e.printStackTrace();
         }
 
-        return new EngineItem(engineItem.getPath());
+        return new EngineItem(engineItem.getPath(), engineItem.getAttributes());
     }
 
     @Override

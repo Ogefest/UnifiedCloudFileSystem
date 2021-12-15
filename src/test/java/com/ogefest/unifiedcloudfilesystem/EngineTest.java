@@ -56,7 +56,7 @@ abstract public class EngineTest {
     @Test
     @Order(4)
     void list() throws IOException, ResourceAccessException {
-        ArrayList<EngineItem> lst = fs.list(new EngineRootItem());
+        ArrayList<EngineItem> lst = fs.list(new EngineItem("/"));
         assertTrue(lst.get(0).getName().equals("abc.txt"));
 
         EngineItem ei = lst.get(0);

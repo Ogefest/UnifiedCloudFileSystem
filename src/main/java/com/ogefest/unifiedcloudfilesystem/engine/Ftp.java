@@ -71,7 +71,7 @@ public class Ftp extends Engine {
 
         client.storeFile(fullpath, input);
 
-        return new EngineItem(engineItem.getPath());
+        return new EngineItem(engineItem.getPath(), engineItem.getAttributes());
     }
 
     @Override
