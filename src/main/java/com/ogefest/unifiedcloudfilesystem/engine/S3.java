@@ -229,7 +229,10 @@ public class S3 extends Engine {
         if (exists(item)) {
             return;
         }
-        EngineItem it = new EngineItem(item.getPath() + "/.dirFile");
+        EngineItemAttribute eia = new EngineItemAttribute();
+        eia.isDirectory = true;
+
+        EngineItem it = new EngineItem(item.getPath() + "/.dirFile", eia);
 
         String msg = "dummy file for mkdir";
         InputStream input = new ByteArrayInputStream(msg.getBytes());

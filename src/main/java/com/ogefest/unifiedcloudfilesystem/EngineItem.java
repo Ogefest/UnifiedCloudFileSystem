@@ -9,10 +9,10 @@ public class EngineItem {
     protected String path;
     protected EngineItemAttribute attributes;
 
-    public EngineItem(String path) {
-        this.path = pathCleanup(path);
-        updateName();
-    }
+//    public EngineItem(String path) {
+//        this.path = pathCleanup(path);
+//        updateName();
+//    }
 
     public EngineItem(String path, EngineItemAttribute attributes) {
         this.path = pathCleanup(path);
@@ -69,7 +69,10 @@ public class EngineItem {
             counter++;
         }
 
-        return new EngineItem(parentPath);
+        EngineItemAttribute eia = new EngineItemAttribute();
+        eia.isDirectory = true;
+
+        return new EngineItem(parentPath, eia);
     }
 
     private void updateName() {

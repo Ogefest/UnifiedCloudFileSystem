@@ -93,7 +93,10 @@ public class UnifiedCloudFileSystem {
     }
 
     public FileObject getByPath(String engineName, String path) {
-        return new FileObject(engineName, new EngineItem(path));
+        EngineItemAttribute eia = new EngineItemAttribute();
+        eia.isDirectory = true;
+
+        return new FileObject(engineName, new EngineItem(path, eia));
     }
 
 }
